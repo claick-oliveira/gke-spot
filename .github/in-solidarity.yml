@@ -1,0 +1,18 @@
+rules:
+  master:
+    level: warning
+  slave:
+    level: warning
+  whitelist:
+    level: warning
+  blacklist:
+    level: warning
+  grandfathered:
+    level: off
+  sanity_check:
+    level: off
+  man_hours:
+    level: off
+ignore:
+ - ".github/in-solidarity.yml"  # default
+ - "**/*.yml"
