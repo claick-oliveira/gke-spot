@@ -1,0 +1,43 @@
+apiVersion: skaffold/v4beta3
+kind: Config
+profiles:
+- name: spot
+  manifests:
+    rawYaml:
+      - kubernetes/selector/pi-app-spot.yaml
+  deploy:
+    kubectl: {}
+- name: ondemand
+  manifests:
+    rawYaml:
+      - kubernetes/selector/pi-app-ondemand.yaml
+  deploy:
+    kubectl: {}
+- name: web
+  manifests:
+    rawYaml:
+      - kubernetes/web/php-apache.yaml
+      - kubernetes/web/php-hpa.yaml
+  deploy:
+    kubectl: {}
+- name: required
+  manifests:
+    rawYaml:
+      - kubernetes/affinity/php-apache-required.yaml
+      - kubernetes/affinity/php-hpa.yaml
+  deploy:
+    kubectl: {}
+- name: preferred
+  manifests:
+    rawYaml:
+      - kubernetes/affinity/php-apache-preferred.yaml
+      - kubernetes/affinity/php-hpa.yaml
+  deploy:
+    kubectl: {}
+- name: tolerations
+  manifests:
+    rawYaml:
+      - kubernetes/tolerations/pi-app-spot.yaml
+      - kubernetes/tolerations/pi-app-ondemand.yaml
+  deploy:
+    kubectl: {}

@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-spot
+spec:
+  template:
+    metadata:
+      labels:
+        app: pi-spot
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-spot: "true"
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: pi-spot
+        image: perl:5.34.0
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never
+      tolerations:
+      - key: spot-node-pool
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
+  backoffLimit: 4

@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi-ondemand
+spec:
+  template:
+    metadata:
+      labels:
+        app: pi-ondemand
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+      - name: pi-ondemand
+        image: perl:5.34.0
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never
+      tolerations:
+      - key: ondemand-node-pool
+        operator: Equal
+        value: "true"
+        effect: PreferNoSchedule
+  backoffLimit: 4

@@ -97,4 +97,25 @@ module "gke" {
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
+
+  node_pools_taints = {
+    all = []
+
+    ondemand-node-pool = [
+      {
+        key    = "ondemand-node-pool"
+        value  = true
+        effect = "PREFER_NO_SCHEDULE"
+      },
+    ]
+
+    spot-node-pool = [
+      {
+        key    = "spot-node-pool"
+        value  = true
+        effect = "NO_SCHEDULE"
+      },
+    ]
+  }
+
 }

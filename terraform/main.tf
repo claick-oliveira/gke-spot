@@ -38,7 +38,7 @@ module "gke" {
   machine_type        = "g1-small"
   node_locations      = "us-central1-a,us-central1-b,us-central1-c"
   min_count           = 0
-  max_count           = 3
+  max_count           = 2
   gateway_api_channel = "CHANNEL_STANDARD"
 }
 
