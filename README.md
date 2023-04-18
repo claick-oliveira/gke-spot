@@ -1,5 +1,7 @@
 # gke-spot
 
+[![](https://github.com/jpoehnelt/in-solidarity-bot/raw/main/static//badge-flat.png)](https://github.com/apps/in-solidarity)
+
 This repository is an example to use GKE and Spot. If you want yo read more about it:
 
 - [GKE](https://cloud.google.com/kubernetes-engine)
