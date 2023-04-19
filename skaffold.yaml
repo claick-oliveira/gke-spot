@@ -34,6 +34,13 @@ profiles:
       - kubernetes/affinity/php-hpa.yaml
   deploy:
     kubectl: {}
+- name: preferred-required
+  manifests:
+    rawYaml:
+      - kubernetes/affinity/php-apache-required-preferred.yaml
+      - kubernetes/affinity/php-hpa.yaml
+  deploy:
+    kubectl: {}
 - name: tolerations
   manifests:
     rawYaml:

@@ -18,7 +18,6 @@ variable "gcp_service_list" {
   type = list(string)
   default = [
     "compute.googleapis.com",
-    "container.googleapis.com",
-    "artifactregistry.googleapis.com"
+    "container.googleapis.com"
   ]
 }

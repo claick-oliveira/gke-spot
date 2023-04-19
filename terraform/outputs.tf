@@ -13,16 +13,6 @@ output "subnet_proxy_name" {
   value       = module.vpc.subnet_proxy_name
 }
 
-output "repository_name" {
-  description = "The name of the Artifact Registry Repository"
-  value       = module.artifactregistry.repository_name
-}
-
-output "repository_id" {
-  description = "The ID of the Artifact Registry Repository"
-  value       = module.artifactregistry.repository_id
-}
-
 output "kubernetes_endpoint" {
   sensitive = true
   value     = module.gke.kubernetes_endpoint

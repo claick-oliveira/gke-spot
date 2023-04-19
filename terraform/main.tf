@@ -35,15 +35,9 @@ module "gke" {
   vpc_name            = module.vpc.vpc_name
   cidr_pods           = "pods-range"
   cidr_services       = "services-range"
-  machine_type        = "g1-small"
+  machine_type        = "e2-small"
   node_locations      = "us-central1-a,us-central1-b,us-central1-c"
   min_count           = 0
-  max_count           = 2
+  max_count           = 3
   gateway_api_channel = "CHANNEL_STANDARD"
-}
-
-module "artifactregistry" {
-  source        = "./modules/artifactregistry"
-  repository_id = "spot"
-  gcp_region    = var.gcp_region
 }

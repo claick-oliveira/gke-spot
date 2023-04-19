@@ -6,11 +6,6 @@ resource "google_service_account" "gke-spot-sa" {
   display_name = "Service Account For GKE ${var.cluster_name}"
   project      = var.gcp_project_id
 }
-resource "google_project_iam_member" "artifactregistry-role" {
-  role    = "roles/artifactregistry.reader"
-  member  = "serviceAccount:${google_service_account.gke-spot-sa.email}"
-  project = var.gcp_project_id
-}
 
 resource "google_project_iam_member" "node-service-account-role" {
   role    = "roles/container.nodeServiceAccount"
@@ -63,13 +58,35 @@ module "gke" {
       location_policy        = "BALANCED"
     },
     {
-      name                   = "spot-node-pool"
-      machine_type           = var.machine_type
+      name                   = "g1-spot-node-pool"
+      machine_type           = "g1-small"
       node_locations         = var.node_locations
       min_count              = 0
       max_count              = 0
-      total_min_count        = var.min_count
-      total_max_count        = var.max_count
+      total_min_count        = 0
+      total_max_count        = 3
+      local_ssd_count        = 0
+      spot                   = true
+      disk_size_gb           = 100
+      disk_type              = "pd-standard"
+      image_type             = "COS_CONTAINERD"
+      enable_gcfs            = false
+      enable_gvnic           = false
+      auto_repair            = true
+      auto_upgrade           = true
+      preemptible            = false
+      initial_node_count     = 1
+      service_account        = "tf-gke-spot-sa@${var.gcp_project_id}.iam.gserviceaccount.com"
+      location_policy        = "ANY"
+    },
+    {
+      name                   = "e2-spot-node-pool"
+      machine_type           = "e2-small"
+      node_locations         = var.node_locations
+      min_count              = 0
+      max_count              = 0
+      total_min_count        = 0
+      total_max_count        = 3
       local_ssd_count        = 0
       spot                   = true
       disk_size_gb           = 100
@@ -98,6 +115,24 @@ module "gke" {
     ]
   }
 
+  node_pools_metadata = {
+    all = {
+      environment = "${var.cluster_name}"
+    }
+
+    ondemand-node-pool = {
+      node-pool-environment = "${var.cluster_name}-ondemand-node-pool"
+    }
+
+    g1-spot-node-pool = {
+      node-pool-environment = "${var.cluster_name}-g1-spot-node-pool"
+    }
+
+    e2-spot-node-pool = {
+      node-pool-environment = "${var.cluster_name}-e2-spot-node-pool"
+    }
+  }
+
   node_pools_taints = {
     all = []
 
@@ -109,12 +144,38 @@ module "gke" {
       },
     ]
 
-    spot-node-pool = [
+    g1-spot-node-pool = [
       {
         key    = "spot-node-pool"
         value  = true
         effect = "NO_SCHEDULE"
       },
+    ]
+
+    e2-spot-node-pool = [
+      {
+        key    = "spot-node-pool"
+        value  = true
+        effect = "NO_SCHEDULE"
+      },
+    ]
+  }
+
+  node_pools_tags = {
+    all = [
+      "${var.cluster_name}"
+    ]
+
+    ondemand-node-pool = [
+      "ondemand-node-pool",
+    ]
+
+    g1-spot-node-pool = [
+      "g1-spot-node-pool",
+    ]
+
+    e2-spot-node-pool = [
+      "e2-spot-node-pool",
     ]
   }
 
